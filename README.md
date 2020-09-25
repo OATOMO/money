@@ -1,4 +1,14 @@
-### BaoStock参数
+## CMD
+- ##### 拉取日k线证券代码
+```./main.py --mode update-code --date 2020-09-23```
+- ##### 拉取行业分类
+```./main.py --mode industry --date 2020-09-23```
+- ##### 拉取日k线
+```./main.py --mode kLine --date 2020-09-23```
+
+
+## BaoStock参数
+### 日k线
 |参数名称|参数描述|算法说明|
 |:----   |:----:   |:----:|
 |date   |	交易所行情日期     ||	
