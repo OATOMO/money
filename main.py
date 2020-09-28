@@ -42,14 +42,31 @@ def download_data(date):
     print(data_df)
 
 
+# def get_d_kLine(conn, start, end):
+#     data_df = get_kLine(conn, start, end, 'd')
+#     pbar = tqdm(total=data_df.shape[0], desc='入库中')
+#     for i, row in data_df.iterrows():
+#         k = comm.list2lower(row.index.tolist())
+#         v = row.values.tolist()
+#         comm.insertRow(conn, 'stock_d_k_line', k, comm.fullList(v))
+#         pbar.update(1)
+#     print('{start}~{end} 日k线数据入库完成'.format(start=date, end=date))
+
 def get_d_kLine(conn, start, end):
+    write_n = 1000
     data_df = get_kLine(conn, start, end, 'd')
     pbar = tqdm(total=data_df.shape[0], desc='入库中')
+    vList = []
+    k = []
     for i, row in data_df.iterrows():
         k = comm.list2lower(row.index.tolist())
+        if len(vList) >= write_n:
+            comm.insertRows(conn, 'stock_d_k_line', k, vList)
+            vList = []
         v = row.values.tolist()
-        comm.insertRow(conn, 'stock_d_k_line', k, v)
+        vList.append(comm.fullList_str(v))
         pbar.update(1)
+    comm.insertRows(conn, 'stock_d_k_line', k, vList)
     print('{start}~{end} 日k线数据入库完成'.format(start=date, end=date))
 
 
@@ -127,8 +144,8 @@ if __name__ == '__main__':
     conn = init()
     ages = parse_ages()
     date = ages.date
-    start = ages.date
-    end = ages.date
+    start = ages.start
+    end = ages.end
     mode = ages.mode
     if mode == 'update-code':
         updateCode(conn, date)

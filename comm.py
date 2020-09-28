@@ -61,6 +61,33 @@ def insertRow(conn, tableName, keyList, valueList):
     conn.commit()
 
 
+# 多行插入
+def insertRows(conn, tableName, keyList, valueLists):
+    if type(valueLists[0]) != list:
+        return
+    if len(keyList) != len(valueLists[0]):  # 无法判断就返回存在,不让其添加
+        return
+    # sql = "INSERT INTO population (id,time,in,out) VALUES ( %s,%s,%s,%s)"
+    sqlStr = "INSERT INTO {tabName} ({keyStr}) VALUES  {vStr}  ON CONFLICT DO NOTHING;;"
+    sStr = ''
+    keyStr = ''
+    for i in range(len(keyList)):
+        sStr += '%s,'
+        keyStr += ('"' + keyList[i] + '",')
+    sStr = sStr.rstrip(',')
+    rowsStr = ''
+    for row in valueLists:
+        rowsStr += '(\''+'\',\''.join(row)+'\'),'
+    rowsStr = rowsStr.rstrip(',')
+    rowsStr = rowsStr.replace('\'NULL\'', 'NULL')
+    keyStr = keyStr.rstrip(',')
+    sql = sqlStr.format(tabName=tableName, keyStr=keyStr, vStr=rowsStr)
+    # print(sql)
+    cur = conn.cursor()
+    cur.execute(sql, (valueLists))
+    conn.commit()
+
+
 def getAllCode(conn):
     sql = "select * from stock_code where trade_status='1'"
     codes = []
@@ -81,4 +108,24 @@ def list2lower(l):
     r = []
     for i in l:
         r.append(i.lower())
+    return r
+
+
+def fullList(l):
+    r = []
+    for i in l:
+        if i == '':
+            r.append(None)
+        else:
+            r.append(i)
+    return r
+
+
+def fullList_str(l):
+    r = []
+    for i in l:
+        if i == '':
+            r.append('NULL')
+        else:
+            r.append(i)
     return r
