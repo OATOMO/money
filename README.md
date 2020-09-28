@@ -6,6 +6,7 @@
 - ##### 拉取日k线
 ```./main.py --mode kLine --date 2020-09-23```
 
+```./main.py --mode kLine --start 2020-01-01 --end 2020-02-01```
 
 ## BaoStock参数
 ### 日k线
