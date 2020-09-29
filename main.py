@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-#
 # -------------------------------------------------------------------------------
-# Name:         text
+# Name:         main
 # Description:  
 # Date:         2020/9/23
 # -----------------------------------------------------------------------------
@@ -16,12 +16,6 @@ import comm
 import argparse
 from tqdm import tqdm
 
-
-pgHost = '172.16.2.53'
-pgPort = 5432
-pgDB = 'economicanalysis'
-pgUSER = 'economic'
-pgPW = 'economic@ynty1'
 
 
 def download_data(date):
@@ -132,7 +126,7 @@ def parse_ages():
 
 
 def init():
-    conn = comm.initPgDB(pgDB, pgUSER, pgPW, pgHost, pgPort)
+    conn = comm.initPgDB(comm.pgDB, comm.pgUSER, comm.pgPW, comm.pgHost, comm.pgPort)
     cur = conn.cursor()
     cur.execute("SET TIME ZONE 'Asia/Chongqing';")
     conn.commit()

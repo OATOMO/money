@@ -5,6 +5,11 @@
 # Date:         2020/9/24
 # -----------------------------------------------------------------------------
 import psycopg2
+pgHost = '172.16.2.53'
+pgPort = 5432
+pgDB = 'economicanalysis'
+pgUSER = 'economic'
+pgPW = 'economic@ynty1'
 
 
 def initPgDB(dbName, user, passwd, host, port):
