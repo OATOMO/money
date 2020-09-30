@@ -22,8 +22,10 @@ def sql_select_all_code(conn):
         return []
 
 
-def sql_code_kline(conn, code):
-    sql = "select text(date) as date,close from stock_d_k_line where code='{code}' order by date".format(code=code)
+def sql_code_kline(conn, code, start, end):
+    sql = "select text(date) as date,close from stock_d_k_line where code='{code}' and \
+        date>=date('{start}') and date<date('{end}')+interval '1 year' order by date;".format(
+        code=code, start=start, end=end)
     cur = conn.cursor()
     data = []
     try:
